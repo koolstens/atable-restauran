@@ -1,0 +1,49 @@
+<!-- -->
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      <strong>Commandes </strong> en attente
+    </ion-title>
+    <ion-buttons end>
+      <button ion-button tappable (click)="presentNotifications($event)">
+        <ion-icon name="notifications"></ion-icon>
+      </button>
+      <button ion-button tappable (click)="goToAccount()">
+        <ion-icon name="cog"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+  <ion-toolbar>
+    <ion-searchbar [(ngModel)]="terms" (ionChange)="sort()" placeholder="Filtrer les commandes"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding class="animated fadeIn common-bg">
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content pullingIcon="arrow-dropdown"></ion-refresher-content>
+    </ion-refresher>
+      <ion-list *ngFor="let order of this.orders | search : terms | sort: {property: column, order: order1}">
+    <ion-item color="bestcream" (click)="viewOrderDetails(order)">
+        <h2 class="text-primary">
+            {{ order.user_name }} (# {{order.order_rec_id}})
+        </h2>
+        <p>
+            {{ order.final_total }} $   &nbsp;&nbsp; <ion-badge>Heure: {{order.receive_time}}</ion-badge>
+        </p>
+        <p>
+            <ion-badge color="accept" *ngIf="order.order_flag == 1" item-end block>Accept&eacute;</ion-badge>
+            <ion-badge *ngIf="order.order_flag == 2" item-end block>Rejet&eacute;</ion-badge>
+            <ion-badge *ngIf="order.order_flag == 0" item-end block>En attente</ion-badge>
+        </p>
+    </ion-item>
+  </ion-list>
+
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-title>Atable Chrono <div class="logo"></div></ion-title>
+  </ion-toolbar>
+</ion-footer>
